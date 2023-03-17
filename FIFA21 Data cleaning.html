@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data cleaning</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h3 id="data-cleaning-challenge-fifa-21-dataset">DATA CLEANING CHALLENGE: <em>FIFA 21 dataset</em></h3>
+<blockquote>
+<p><em><strong>Executed By Ajiboye Abeeb</strong></em></p>
+</blockquote>
+<blockquote>
+<p><em><a href="https://www.linkedin.com/in/abeeb-ajiboye-a153b0205/"><strong>Click to check my Linkedin profile</strong></a></em></p>
+</blockquote>
+<blockquote>
+<p><em><a href="https://twitter.com/Da_Flexybee"><strong>Twitter link</strong></a></em></p>
+</blockquote>
+<blockquote>
+<p><em><a href="https://github.com/DaFlexybee/FIFA21-Data-Cleaning-Project.git"><strong>Github</strong></a></em></p>
+</blockquote>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*WjrYb8DHEMznV37Qz374CA.jpeg" alt=""></p>
+<h3 id="introduction">Introduction</h3>
+<p>A recent data cleaning challenge organized in the data tech space gives every Data Analyst at all levels of expertise (beginner, intermediate, or even expert) the opportunity to create a portfolio-worthy project that can be shared with recruiters.</p>
+<p>The challenge encouraged all participants to put their data cleaning skills to the test by using any of their preferred tools (For example; Power query, Excel, Python, R, SQL, Google sheets). The challenge also allows Data Analysts to connect with other learners and build a strong network.</p>
+<blockquote>
+<p><em>As a participant in the challenge, I used Microsoft SQL Server for this cleaning project using the FIFA 21 dataset provided.</em></p>
+</blockquote>
+<h4 id="what-to-look-out-for-when-cleaning-your-data">What to look out for when cleaning your data</h4>
+<ul>
+<li>Incorrect data types</li>
+<li>Null entries</li>
+<li>Missing values</li>
+<li>Duplicate entries</li>
+<li>Errors in spellings and values</li>
+<li>Wrong calculations across rows and columns</li>
+<li>Irrelevant data</li>
+<li>Outliers</li>
+</ul>
+<p><strong>Let’s have a look at our data set</strong></p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*kWKnR8VdBJlscFbrlH5NNw.png" alt=""></p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*hT8upwj5oNN7_of6VSjjzA.jpeg" alt=""></p>
+<pre><code>         1. Few first columns from the data
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*vpltO_3N_RB69LSu-pKqrw.jpeg" alt=""></p>
+<pre><code>         2. Few other columns from the data
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*f5k7NE8pqxylkkZthsRL-A.jpeg" alt=""></p>
+<pre><code>       3. Few more columns from the data
+</code></pre>
+<h4 id="variable-definitions">Variable Definitions</h4>
+<blockquote>
+<p><em>ID: Unique identification number for each player</em><br>
+<em>Name: Player’s name</em><br>
+<em>LongName: Player’s full name</em><br>
+<em>photoUrl: URL to the player’s photo</em><br>
+<em>playerUrl: URL to the player’s profile page</em><br>
+<em>W/F: Player’s weak foot rating</em><br>
+<em>SM: Player’s skill moves rating</em><br>
+<em>A/W: Player’s attacking work rate</em><br>
+<em>D/W: Player’s defensive work rate</em><br>
+<em>IR: Player’s international reputation rating</em><br>
+<em><em>HITS: Number of times the player has been searched for in the</em> game. Nationality: Player’s nationality… <a href="https://github.com/DaFlexybee/FIFA21-Data-Cleaning-Project/blob/7519a94e914d8c376d326d2debf792297a151128/FIFA21%20Dataset_dictionary">Click here for the complete list</a></em></p>
+</blockquote>
+<h4 id="observations-from-our-previewed-data"><strong>Observations from our previewed data</strong></h4>
+<ul>
+<li>Number of rows = 18979</li>
+<li>Number of columns = 77</li>
+<li>Contract column has wrong delimiter and needs proper categorization</li>
+<li>Inconsistencies at the Height column unit for example some rows are represented in cm while others are in feet and inches.</li>
+<li>Inconsistencies at the Weight column unit for example some rows are represented in kg while others are in lbs.</li>
+<li>Loan date end column has enormous amount of null values and dates on it are written in text.</li>
+<li>Value, Wage and Release name columns are represented in M and K abbreviation of million and thousand as well as the euro sign starting all the figures.</li>
+<li>W/F, SM and IR columns are all rating columns which has special character ‘★’ in them which has to be cleansed.</li>
+<li>Hits column also have rows that are represented by K in abbreviation of thousand and also contain null values.</li>
+<li>Long Name column also has its naming conventions in country specifics, I feel the need to keep the name plain and general for additional clarity and neatness.</li>
+<li>Some club columns also have unwanted characters such as ‘.’ and ‘1’.</li>
+</ul>
+<h4 id="proposed-approach">Proposed Approach</h4>
+<ul>
+<li>Update the Height and Weight column for consistencies</li>
+<li>Update the Contract column delimiter, create new columns for contract status, Contract Start and End Year, and populate them with data from the Contract column for categorization and status purposes.</li>
+<li>As a result, we will have columns such as Contract Status, which will include those with active contracts, on loan players, and free agents, as well as Contract Start and End Year.</li>
+<li>Adding a new column for loan status (not on loan, on loan, and free) rather than loan end date, while populating the Contract end year column with dates written in text at loan end date for loan players so we know which year loan contracts expire.</li>
+<li>Cleaning Columns written as € and M, K and changing there column names to describe them properly.</li>
+<li>Removing the ‘★’ and other unwanted characters from the columns that have them.</li>
+<li>Use player names at the player url column to update the long name. Check if there are duplicates, change column names accordingly<br>
+for consistency and neatness.</li>
+<li>Ensure all columns are put in the right data type format and drop all irrelevant columns.</li>
+</ul>
+<h4 id="starting-the-cleaning-process">Starting the cleaning process</h4>
+<p>I. We begin by Updating the Height and Weight column for consistency</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*bn90q9sTK9_6u_jVlkbKYw.png" alt=""></p>
+<pre><code>                      For Height
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*MZT1-OHJ2EIFE4waQyOJQA.png" alt=""></p>
+<pre><code>                     For Weight
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*dUlpg5_SYOiJaDh4c48R5Q.jpeg" alt=""></p>
+<p><strong>Result after column renaming and data type fixed</strong></p>
+<p>II. Next we Clean Columns written as € and M, K and change there column names to describe them properly.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*oKeqa8l9EmryWOFw380UbA.png" alt=""></p>
+<pre><code>                    For Value
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*KMQ-jE8ctX-JUlkOtyhN-w.png" alt=""></p>
+<pre><code>                    For Wage
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*otVrsGCIHhETu5jcua9RIQ.png" alt=""></p>
+<pre><code>               For Release Clause
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*jPz_6pv7XUCyJLKw55x98Q.jpeg" alt=""></p>
+<pre><code> Result after column renaming and data type fixed
+</code></pre>
+<p>III. Next we remove the ‘★’ and other unwanted characters from the columns that have them.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*S97QXAp1El0STVDjMCWaqg.png" alt=""></p>
+<pre><code>Removing the ‘★’ in different columns it had appeared as rating
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*kNlsoZCL7K-9stlQfvq3nw.jpeg" alt=""></p>
+<pre><code>Result after column renaming and data type fixed
+</code></pre>
+<p>IV. Next we update Contract column delimiter, create new columns, contract status, Contract Start and End Year, populate it using contract column for categorization and status purposes.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*lRaWAr_69jKnYIPGA5sWNQ.png" alt=""></p>
+<pre><code>Changing the delimiter then updating contracts column with date in text format as ‘on loan’ since the date that appeared there are the same as those in loan end dates
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*jaZ9wVmQ_9D1QA3n1mSxtA.png" alt=""></p>
+<pre><code>Splitting the Contract column by creating two new columns and populating them with values from Contract column
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*wex25aPt8-zaYs0xmJ7MhA.png" alt=""></p>
+<pre><code>Also needed a contract status column for categorization purposes, we then end up with Active contracts, on loan players and Free categories
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*U83NjhbTtMFNjeKiP3vAeg.jpeg" alt=""></p>
+<pre><code> Result for the above syntax after data type had also been fixed
+</code></pre>
+<p>V. I also update Contract_end_year column with dates written in text at loan end date column for loan players so we know which year loan contracts ends and then Create new column where there’s loan status rather than loan end date.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*DF3Y9JChTg1fcQh5cPPFNA.png" alt=""></p>
+<pre><code>Since the same date appeared in the original contract column, I extracted the year from the loan end date column and entered it into the contract year end column. I also added a loan status column for categorization, resulting in Not on loan, On loan, and Free categories.
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*5IchO6C51C8kIKYu69bGZA.jpeg" alt=""></p>
+<pre><code>Result for the above syntax after data type had also been fixed
+</code></pre>
+<p>VI. Additionally, we remove remaining unwanted characters from club column and Convert K in hits column.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*gMmaOQ8OQOrbKa5e7u9ArQ.png" alt=""></p>
+<pre><code>Some clubs like FC Koln and the likes has 1 and . in them so had to remove the unwanted characters. Also Hits column has values in k such as 8.6k, 1.6k and the likes among normal figures, had to convert the k to thousands and later change the column data type.
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*PEMhP1ZtaI0g6uPd1fkBsw.jpeg" alt=""></p>
+<pre><code>Result for the above syntax after data type had also been fixed
+</code></pre>
+<p>VII. Use player names in the player url column to update the Long name column. Check if there are duplicates, change column names accordingly<br>
+for consistency and neatness.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*MjWS0NW7Q958XnnkltG_RA.png" alt=""></p>
+<pre><code>For neatness purposes, the long name column had to be worked on
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*Seh43Hstt0dRGmVc8pvnCA.jpeg" alt=""></p>
+<pre><code>Result for the above syntax after data type had also been fixed
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*nGNBsPTprkIPptrztseZAA.png" alt=""></p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*W-upvLtWEhRTHkyZQX_nJw.jpeg" alt=""></p>
+<pre><code>There are no duplicates; however, using another column such as Name will result in duplicates; however, if you look closely, you will notice that some players have different contracts in different years, which is why they appear more than once. For example, a player can have an active contract with a club for a year, be on loan for another year, and be a free agent for another year.
+</code></pre>
+<p>VIII. Changing Column name, all columns set to the right data type format and drop all irrelevant columns</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*PTcwo8KsXnQW0eYgNSpTPA.png" alt=""></p>
+<h4 id="conclusion"><strong>CONCLUSION</strong></h4>
+<p>Now we have our new sparkling clean data set for further usage.<br>
+Take a little glimpse at what our new data looks like below and <a href="https://github.com/DaFlexybee/FIFA21-Data-Cleaning-Project/blob/c0d5a80befe4d762a7f6ad54df9af962869788a5/FIFA21%20Clean%20data.csv">Click here</a> to download and view the data.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*Gjg0nxMFYzSUfkSpwaz9CA.jpeg" alt=""></p>
+<pre><code>1. Few first columns from the clean data
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*IKPfh1F29ucxDqUc_NrWyA.jpeg" alt=""></p>
+<pre><code>2. another few columns from the clean data
+</code></pre>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*FX-MKa2WoQLy6f0Ur4sswA.jpeg" alt=""></p>
+<pre><code>3. other columns from the clean data
+</code></pre>
+</div>
+</body>
+
+</html>
